@@ -12,7 +12,8 @@ import { useAppContext } from "@/context/context";
 
 export default function Dashboard() {
     const isMobile = useIsMobile();
-    const  {SetTeamOpen} = useAppContext()
+    const { SetTeamOpen, TeamOpen } = useAppContext()
+    console.log(TeamOpen)
 
     return (
         <SidebarProvider defaultOpen={!isMobile}>
@@ -55,7 +56,10 @@ export default function Dashboard() {
                             </div>
 
                             <div className="flex items-center space-x-2">
-                                <Button className="bg-blue-600 md:flex hidden hover:bg-blue-700" onClick={() => SetTeamOpen(true)}>
+                                <Button className="bg-blue-600 md:flex hidden hover:bg-blue-700" onClick={() => {
+                                    console.log("Button clicked!")
+                                    SetTeamOpen(true)
+                                }}>
                                     <Plus className="mr-2 h-4 w-4" />
                                     Create New Team
                                 </Button>
@@ -97,7 +101,7 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            <CreateTeamDialog/>
+            <CreateTeamDialog />
         </SidebarProvider>
     );
 }

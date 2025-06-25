@@ -1,24 +1,47 @@
 'use client'
 
 import { useState } from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import axios from 'axios'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useAppContext } from '@/context/context'
 
 export function CreateTeamDialog() {
   const [teamName, setTeamName] = useState("")
-
   const { SetTeamOpen, TeamOpen } = useAppContext()
+  const [loading, setLoading] = useState(false)
 
-  const handleCreateTeam = () => {
-    console.log("Team Name:", teamName)
-    setTeamName("")
+  const handleCreateTeam = async () => {
+    if (!teamName.trim()) return
+
+    try {
+      setLoading(true)
+
+      const response = await axios.post(
+        'http://localhost:3000/api/teams/create',
+        { name: teamName },
+        {
+          withCredentials: true, 
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+
+      console.log("✅ Team created:", response.data.team)
+
+      setTeamName("")
+      SetTeamOpen(false) 
+    } catch (err: any) {
+      console.error("❌ Error creating team:", err.response?.data?.message || err.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <Dialog open={TeamOpen} onOpenChange={SetTeamOpen}>
-
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Create a new Team</DialogTitle>
@@ -37,8 +60,8 @@ export function CreateTeamDialog() {
             />
           </div>
 
-          <Button onClick={handleCreateTeam} className="w-full">
-            Create
+          <Button onClick={handleCreateTeam} className="w-full" disabled={loading}>
+            {loading ? "Creating..." : "Create"}
           </Button>
         </div>
       </DialogContent>
