@@ -7,6 +7,6 @@ const router = express.Router();
 
 router.post('/create', isAuthenticated, asyncErrorHandler(createTeam));
 router.get('/GetTeams', isAuthenticated, asyncErrorHandler(getUserTeams));
-router.get('/GetTeamsMember', isAuthenticated, asyncErrorHandler(GetTeamMembers));
+router.post('/GetTeamsMember', isAuthenticated, asyncErrorHandler(GetTeamMembers));
 
 export default router;

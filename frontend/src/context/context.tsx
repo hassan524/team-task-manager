@@ -4,16 +4,22 @@ import React, { createContext, useState, useContext } from 'react'
 
 interface AppContextType {
   TeamOpen: boolean
-  SetTeamOpen: (open: boolean) => void
+  SetTeamOpen: (open: boolean) => void,
+  TaskOpen: boolean,
+  SetTaskOpen: (open: boolean) => void,
+  SelectTeam: any,
+  SetSelectTeam: (team: any) => void
 }
 
 const AppContext = createContext<AppContextType | null>(null)
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [TeamOpen, SetTeamOpen] = useState(false)
+  const [SelectTeam, SetSelectTeam] = useState(null)
+  const [TaskOpen, SetTaskOpen] = useState(false)
 
   return (
-    <AppContext.Provider value={{ TeamOpen, SetTeamOpen }}>
+    <AppContext.Provider value={{ TeamOpen, SetTeamOpen, SelectTeam, SetSelectTeam, TaskOpen, SetTaskOpen }}>
       {children}
     </AppContext.Provider>
   )

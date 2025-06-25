@@ -55,20 +55,24 @@ export function TasksContainer() {
           <CardTitle className="text-lg font-semibold text-gray-900">
             Project Tasks
           </CardTitle>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="h-8">
-                <Filter className="h-4 w-4 mr-2" />
-                Filter
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>All Tasks</DropdownMenuItem>
-              <DropdownMenuItem>In Progress</DropdownMenuItem>
-              <DropdownMenuItem>Completed</DropdownMenuItem>
-              <DropdownMenuItem>High Priority</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex items-center space-x-2">
+            <Button variant="default" size="sm" className="h-8 px-3 text-sm">
+              + Task
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon" className="h-8 w-8 p-0">
+                  <i className="bi bi-three-dots-vertical text-gray-700 text-base"></i>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>All Tasks</DropdownMenuItem>
+                <DropdownMenuItem>In Progress</DropdownMenuItem>
+                <DropdownMenuItem>Completed</DropdownMenuItem>
+                <DropdownMenuItem>High Priority</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </CardHeader>
 

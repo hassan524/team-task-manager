@@ -1,16 +1,18 @@
+import { useState } from "react";
 import { SidebarProvider } from "../components/ui/sidebar";
 import { DashboardSidebar } from "../components/app-sidebar";
 import { Button } from "../components/ui/button";
 import { Bell, Plus, Menu } from "lucide-react";
 import { useIsMobile } from "../hooks/use-mobile";
 import { Sheet, SheetContent, SheetTrigger } from "../components/ui/sheet";
-import { TeamsContainer } from "@/components/Teams-container";
-import { TeamMembersContainer } from "@/components/Teams-member-container";
+import TeamsContainer from "@/components/Teams-container";
+import TeamMembersContainer from "@/components/Teams-member-container";
 import { TasksContainer } from "@/components/Tasks-container";
 import { CreateTeamDialog } from "@/components/CreateTeam";
 import { useAppContext } from "@/context/context";
 
 export default function Dashboard() {
+     const [selectedTeam, setSelectedTeam] = useState<any>(null);
     const isMobile = useIsMobile();
     const { SetTeamOpen, TeamOpen } = useAppContext()
     console.log(TeamOpen)
@@ -88,8 +90,8 @@ export default function Dashboard() {
                             {/* Team cards */}
                             <div className="flex flex-col gap-5">
                                 <div className="flex lg:flex-row flex-col gap-5">
-                                    <TeamsContainer />
-                                    <TeamMembersContainer />
+                                    <TeamsContainer onSelectTeam={setSelectedTeam}/>
+                                    <TeamMembersContainer team={selectedTeam}/>
                                 </div>
 
                                 {/* Tasks */}

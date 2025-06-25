@@ -1,98 +1,80 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { UserPlus } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useAppContext } from '@/context/context';
 
-const dummyMembers = [
-  {
-    id: 1,
-    name: "John Doe",
-    position: "Frontend Developer",
-    initials: "JD",
-    status: "online",
-    avatarColor: "from-blue-400 to-blue-600",
-  },
-  {
-    id: 2,
-    name: "Sarah Smith",
-    position: "Backend Engineer",
-    initials: "SS",
-    status: "away",
-    avatarColor: "from-purple-400 to-purple-600",
-  },
-  {
-    id: 3,
-    name: "Mike Brown",
-    position: "Designer",
-    initials: "MB",
-    status: "offline",
-    avatarColor: "from-pink-400 to-pink-600",
-  },
-  {
-    id: 4,
-    name: "Emily Wilson",
-    position: "QA Analyst",
-    initials: "EW",
-    status: "online",
-    avatarColor: "from-green-400 to-green-600",
-  },
-];
+interface Member {
+  id: number;
+  name: string;
+  email: string;
+}
 
-const statusColorMap = {
-  online: "bg-green-500",
-  away: "bg-yellow-500",
-  offline: "bg-gray-400",
-};
 
-export function TeamMembersContainer() {
+
+export default function TeamMembersContainer({ }: any) {
+  const [members, setMembers] = useState<Member[]>([]);
+    const {SelectTeam} = useAppContext()
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      if (!SelectTeam) return;
+
+      try {
+        const res = await axios.post(
+          'http://localhost:3000/api/teams/GetTeamsMember',
+          { teamid: SelectTeam.id },
+          { withCredentials: true }
+        );
+
+        setMembers(res.data.members || []);
+      } catch (err) {
+        console.error('Error fetching team members:', err);
+      }
+    };
+
+    fetchMembers();
+  }, [SelectTeam]);
+
+  if (!SelectTeam) {
+    return (
+      <div className="w-full lg:w-1/2 h-[50vh] bg-white border p-4 flex items-center justify-center text-gray-500">
+        Select a team to view its members
+      </div>
+    );
+  }
+
   return (
-    <Card className="bg-white w-full lg:w-[50%] h-[50vh] shadow-sm border border-gray-200/60 flex flex-col">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold text-gray-900">Team Members</CardTitle>
-          <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-500 truncate">Frontend Team</span>
-            <Button variant="ghost" size="icon">
-              <UserPlus className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      </CardHeader>
+    <div className="w-full lg:w-1/2 h-[50vh] bg-white border p-4 overflow-y-auto">
+      <div className="flex justify-between items-center mb-3">
+        <h2 className="text-lg font-semibold">Team Members</h2>
+        <span className="text-sm text-gray-500">{SelectTeam.name}</span>
+      </div>
+      {members.length === 0 ? (
+        <p className="text-sm text-gray-400">No members in this team.</p>
+      ) : (
+        members.map((member) => {
+          const initials = member.name
+            .split(' ')
+            .map((n) => n[0])
+            .join('')
+            .slice(0, 2)
+            .toUpperCase();
 
-      <CardContent className="flex-1 pt-0 pb-0 overflow-hidden">
-        <ScrollArea className="h-full pr-4">
-          <div className="space-y-1">
-            {dummyMembers.map((member) => (
-              <div
-                key={member.id}
-                className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50/80 transition-colors"
-              >
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback
-                    className={cn(
-                      "bg-gradient-to-br text-white font-medium text-xs",
-                      member.avatarColor
-                    )}
-                  >
-                    {member.initials}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-medium text-gray-900 text-sm truncate">{member.name}</h4>
-                  <p className="text-xs text-gray-500 truncate">{member.position}</p>
-                </div>
-                <div className="flex items-center space-x-1.5">
-                <span className={cn("w-2 h-2 rounded-full", statusColorMap[member.status as keyof typeof statusColorMap])}></span>
-                  <span className="text-xs text-gray-500 capitalize">{member.status}</span>
-                </div>
+          return (
+            <div
+              key={member.id}
+              className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition"
+            >
+              <div className="w-8 h-8 bg-blue-500 text-white flex items-center justify-center rounded-full text-sm font-bold">
+                {initials}
               </div>
-            ))}
-          </div>
-        </ScrollArea>
-      </CardContent>
-    </Card>
+              <div className="flex-1">
+                <h4 className="text-sm font-medium text-gray-900">{member.name}</h4>
+                <p className="text-xs text-gray-500">{member.email}</p>
+              </div>
+            </div>
+          );
+        })
+      )}
+    </div>
   );
 }
