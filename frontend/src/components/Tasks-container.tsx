@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Filter } from "lucide-react";
+import { useAppContext } from "@/context/context";
 
 const staticTasks = [
   {
@@ -48,6 +48,8 @@ const staticTasks = [
 ];
 
 export function TasksContainer() {
+  const {SetTaskOpen,SelectTeam} = useAppContext()
+
   return (
     <Card className="bg-white w-full max-w-full shadow-sm border border-gray-200/60 h-[60vh] flex flex-col">
       <CardHeader className="pb-3">
@@ -56,7 +58,7 @@ export function TasksContainer() {
             Project Tasks
           </CardTitle>
           <div className="flex items-center space-x-2">
-            <Button variant="default" size="sm" className="h-8 px-3 text-sm">
+            <Button variant="default" size="sm" className={`h-8 ${SelectTeam ? 'flex' : 'hidden'} px-3 text-sm cursor-pointer`} onClick={() => SetTaskOpen(true)}>
               + Task
             </Button>
             <DropdownMenu>

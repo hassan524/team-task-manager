@@ -10,6 +10,7 @@ import TeamMembersContainer from "@/components/Teams-member-container";
 import { TasksContainer } from "@/components/Tasks-container";
 import { CreateTeamDialog } from "@/components/CreateTeam";
 import { useAppContext } from "@/context/context";
+import { CreateTask } from "@/components/CreateTask";
 
 export default function Dashboard() {
      const [selectedTeam, setSelectedTeam] = useState<any>(null);
@@ -104,6 +105,7 @@ export default function Dashboard() {
             </div>
 
             <CreateTeamDialog />
+            <CreateTask />
         </SidebarProvider>
     );
 }
