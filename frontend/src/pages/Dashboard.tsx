@@ -4,69 +4,95 @@ import { Button } from "../components/ui/button";
 import { Bell, Plus, Menu } from "lucide-react";
 import { useIsMobile } from "../hooks/use-mobile";
 import { Sheet, SheetContent, SheetTrigger } from "../components/ui/sheet";
+import { TeamsContainer } from "@/components/teams-container";
+import { TeamMembersContainer } from "@/components/Teams-member-container";
+import { TasksContainer } from "@/components/tasks-container";
 
 export default function Dashboard() {
-  const isMobile = useIsMobile();
+    const isMobile = useIsMobile();
 
-  return (
-    <SidebarProvider defaultOpen={!isMobile}>
-      <div className="flex h-screen w-screen overflow-hidden bg-gray-50/50">
-        {/* Sidebar for desktop */}
-        {!isMobile && (
-          <div className="w-64 flex-shrink-0">
-            <DashboardSidebar />
-          </div>
-        )}
+    return (
+        <SidebarProvider defaultOpen={!isMobile}>
+            <div className="flex h-screen w-screen overflow-hidden bg-slate-100">
+                {!isMobile && (
+                    <div className="w-64 flex-shrink-0">
+                        <DashboardSidebar />
+                    </div>
+                )}
 
-        {/* Mobile Sheet for Sidebar */}
-        {isMobile && (
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute top-4 left-4 z-50"
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="p-0 w-64">
-              <DashboardSidebar />
-            </SheetContent>
-          </Sheet>
-        )}
+                {isMobile && (
+                    <Sheet>
+                        <SheetTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="absolute top-4 left-4 z-50"
+                            >
+                                <div className="flex items-center h-8 px-1 rounded-md bg-white space-x-2">
+                                    <i className="bi bi-list text-gray-600 text-lg"></i>
+                                </div>
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent side="left" className="p-0 w-64">
+                            <DashboardSidebar />
+                        </SheetContent>
+                    </Sheet>
+                )}
 
-        {/* MAIN CONTENT */}
-        <div className="flex flex-col flex-1 min-w-0">
-          {/* Header */}
-          <header className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900"></h1>
-                <p className="text-sm text-gray-600">Manage teams and track progress</p>
-              </div>
+                <div className="flex flex-col flex-1 min-w-0">
+                    <header className="bg-white md:border-b md:border-gray-200 px-6 py-4">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h1 className={`text-2xl ${!isMobile ? "block" : "hidden"} font-bold text-gray-900`}>
+                                    Team Dashboard
+                                </h1>
+                                <p className={`text-sm ${!isMobile ? "block" : "hidden"} text-gray-600`}>
+                                    Manage teams and track progress
+                                </p>
+                            </div>
 
-              <div className="flex items-center space-x-3">
-                <Button variant="ghost" size="icon" className="relative">
-                  <Bell className="h-5 w-5" />
-                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
-                </Button>
-                <Button className="bg-blue-600 hover:bg-blue-700">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Create New Team
-                </Button>
-              </div>
+                            <div className="flex items-center space-x-2">
+                                <Button className="bg-blue-600 md:flex hidden hover:bg-blue-700">
+                                    <Plus className="mr-2 h-4 w-4" />
+                                    Create New Team
+                                </Button>
+
+                                {isMobile && (
+                                    <div className="flex items-center h-8 px-1 rounded-md bg-white space-x-2">
+                                        <i className="bi bi-three-dots-vertical text-gray-600 text-lg"></i>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </header>
+
+                    <main className="flex-1 overflow-y-auto">
+                        <div className="px-4 pt-4 pb-8 flex flex-col gap-8 min-h-full md:mt-0 mt-5">
+                            {/* Page header */}
+                            <div className="flex flex-col gap-1">
+                                <h1 className={`text-2xl ${!isMobile ? "hidden" : "block"} text-gray-900`}>
+                                    Hi Hassan!
+                                </h1>
+                                <h1 className={`text-3xl ${!isMobile ? "hidden" : "block"} font-semibold text-gray-900`}>
+                                    Manage Your Team And Tasks
+                                </h1>
+                            </div>
+
+                            {/* Team cards */}
+                            <div className="flex flex-col gap-5">
+                                <div className="flex lg:flex-row flex-col gap-5">
+                                    <TeamsContainer />
+                                    <TeamMembersContainer />
+                                </div>
+
+                                {/* Tasks */}
+                                <TasksContainer />
+                            </div>
+                        </div>
+                    </main>
+
+                </div>
             </div>
-          </header>
-
-          {/* Body */}
-          <main className="flex-1 p-6 overflow-y-auto">
-            <div className="h-full flex flex-col space-y-6">
-              <p className="text-gray-600 text-center">Dashboard content goes here.</p>
-            </div>
-          </main>
-        </div>
-      </div>
-    </SidebarProvider>
-  );
+        </SidebarProvider>
+    );
 }
