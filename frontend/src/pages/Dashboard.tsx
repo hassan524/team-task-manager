@@ -4,12 +4,15 @@ import { Button } from "../components/ui/button";
 import { Bell, Plus, Menu } from "lucide-react";
 import { useIsMobile } from "../hooks/use-mobile";
 import { Sheet, SheetContent, SheetTrigger } from "../components/ui/sheet";
-import { TeamsContainer } from "@/components/teams-container";
+import { TeamsContainer } from "@/components/Teams-container";
 import { TeamMembersContainer } from "@/components/Teams-member-container";
-import { TasksContainer } from "@/components/tasks-container";
+import { TasksContainer } from "@/components/Tasks-container";
+import { CreateTeamDialog } from "@/components/CreateTeam";
+import { useAppContext } from "@/context/context";
 
 export default function Dashboard() {
     const isMobile = useIsMobile();
+    const  {SetTeamOpen} = useAppContext()
 
     return (
         <SidebarProvider defaultOpen={!isMobile}>
@@ -52,7 +55,7 @@ export default function Dashboard() {
                             </div>
 
                             <div className="flex items-center space-x-2">
-                                <Button className="bg-blue-600 md:flex hidden hover:bg-blue-700">
+                                <Button className="bg-blue-600 md:flex hidden hover:bg-blue-700" onClick={() => SetTeamOpen(true)}>
                                     <Plus className="mr-2 h-4 w-4" />
                                     Create New Team
                                 </Button>
@@ -93,6 +96,8 @@ export default function Dashboard() {
 
                 </div>
             </div>
+
+            <CreateTeamDialog/>
         </SidebarProvider>
     );
 }
