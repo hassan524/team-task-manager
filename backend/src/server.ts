@@ -6,6 +6,7 @@ import { Pool } from 'pg';
 import { connectToDB } from './db/db';
 import auth from './routes/auth';
 import teams from "./routes/teams"
+import tasks from "./routes/tasks"
 import cors from 'cors';
 
 const app = express();
@@ -43,6 +44,8 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/api/auth', auth);
 app.use('/api/teams', teams);
+app.use('/api/tasks', tasks);
+
 
 async function startServer() {
   await connectToDB();

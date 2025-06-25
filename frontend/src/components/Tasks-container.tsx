@@ -1,6 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,95 +7,149 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAppContext } from "@/context/context";
-
-const staticTasks = [
-  {
-    id: 1,
-    title: "Design landing page",
-    description: "Create responsive design for marketing site",
-    status: "in-progress",
-    priority: "high",
-  },
-  {
-    id: 2,
-    title: "API Integration",
-    description: "Connect backend services",
-    status: "completed",
-    priority: "medium",
-  },
-  {
-    id: 3,
-    title: "Setup Database",
-    description: "Configure PostgreSQL for development",
-    status: "in-progress",
-    priority: "low",
-  },
-  {
-    id: 4,
-    title: "QA Testing",
-    description: "Test all user flows and edge cases",
-    status: "in-progress",
-    priority: "medium",
-  },
-  {
-    id: 5,
-    title: "Deployment",
-    description: "Push to production environment",
-    status: "pending",
-    priority: "high",
-  },
-];
+import axios from "axios";
 
 export function TasksContainer() {
-  const {SetTaskOpen,SelectTeam} = useAppContext()
+  const { SetTaskOpen, SelectTeam } = useAppContext();
+  const [tasks, setTasks] = useState<any[]>([]);
+
+  const refreshTasks = async () => {
+    if (!SelectTeam) return;
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/api/tasks/getTasks?teamId=${SelectTeam.id}`,
+        { withCredentials: true }
+      );
+      setTasks(res.data.tasks || []);
+    } catch (err) {
+      console.error("Failed to fetch tasks", err);
+    }
+  };
+
+  useEffect(() => {
+    if (SelectTeam) refreshTasks();
+  }, [SelectTeam]);
+
+  useEffect(() => {
+    if (SelectTeam) {
+      // @ts-ignore
+      window.refreshTasks = refreshTasks;
+    }
+  }, [SelectTeam]);
 
   return (
-    <Card className="bg-white w-full max-w-full shadow-sm border border-gray-200/60 h-[60vh] flex flex-col">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold text-gray-900">
-            Project Tasks
-          </CardTitle>
-          <div className="flex items-center space-x-2">
-            <Button variant="default" size="sm" className={`h-8 ${SelectTeam ? 'flex' : 'hidden'} px-3 text-sm cursor-pointer`} onClick={() => SetTaskOpen(true)}>
-              + Task
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" className="h-8 w-8 p-0">
-                  <i className="bi bi-three-dots-vertical text-gray-700 text-base"></i>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>All Tasks</DropdownMenuItem>
-                <DropdownMenuItem>In Progress</DropdownMenuItem>
-                <DropdownMenuItem>Completed</DropdownMenuItem>
-                <DropdownMenuItem>High Priority</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+    <div className="w-full bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex flex-col h-[60vh] overflow-y-auto">
+      {/* Header */}
+      <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
+        <h2 className="text-lg font-semibold text-gray-900">Project Tasks</h2>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="default"
+            size="sm"
+            className={`h-8 px-3 text-sm cursor-pointer ${SelectTeam ? "flex" : "hidden"}`}
+            onClick={() => SetTaskOpen(true)}
+          >
+            + Task
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon" className="h-8 w-8 p-0">
+                <i className="bi bi-three-dots-vertical text-gray-700 text-base"></i>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>All Tasks</DropdownMenuItem>
+              <DropdownMenuItem>In Progress</DropdownMenuItem>
+              <DropdownMenuItem>Completed</DropdownMenuItem>
+              <DropdownMenuItem>High Priority</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-      </CardHeader>
+      </div>
 
-      <CardContent className="pt-0 pb-3 flex-1 overflow-hidden">
-        <ScrollArea className="h-full pr-4">
-          <div className="space-y-3">
-            {staticTasks.map((task) => (
-              <div
-                key={task.id}
-                className="p-4 rounded-lg border border-gray-200 hover:bg-gray-50 transition"
-              >
-                <h3 className="text-sm font-semibold text-gray-900">{task.title}</h3>
-                <p className="text-xs text-gray-600">{task.description}</p>
-                <div className="text-xs text-gray-500 mt-2 flex space-x-3">
-                  <span>Status: {task.status}</span>
-                  <span>Priority: {task.priority}</span>
-                </div>
-              </div>
-            ))}
+      {/* Task List */}
+      <div className="flex flex-col gap-3">
+        {tasks.map((task: any) => (
+          <div
+            key={task.id}
+            className="w-full p-4 rounded-lg border border-gray-200 hover:bg-gray-50 transition"
+          >
+            {/* Task title + menu */}
+            <div className="flex justify-between items-start gap-2">
+              <h3 className="text-sm font-semibold text-gray-900 break-words w-full max-w-[85%] capitalize">
+                {task.task_name}
+              </h3>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className={`h-6 w-6 shrink-0 rounded-full transition ${
+                      task.is_completed
+                        ? "bg-green-500 cursor-not-allowed"
+                        : "bg-gray-400 hover:bg-gray-500"
+                    }`}
+                    disabled={task.is_completed}
+                    aria-label="Open task options"
+                  ></button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {!task.is_completed && (
+                    <DropdownMenuItem
+                      onClick={async () => {
+                        try {
+                          await axios.post(
+                            "http://localhost:3000/api/tasks/toggle",
+                            {
+                              task_id: task.id,
+                              is_completed: true,
+                            },
+                            { withCredentials: true }
+                          );
+                          window.refreshTasks?.();
+                        } catch (err) {
+                          alert("Failed to mark complete");
+                        }
+                      }}
+                    >
+                      Complete
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      const confirm = window.confirm("Are you sure to delete?");
+                      if (!confirm) return;
+                      try {
+                        await axios.post(
+                          "http://localhost:3000/api/tasks/delete",
+                          {
+                            task_id: task.id,
+                          },
+                          { withCredentials: true }
+                        );
+                        window.refreshTasks?.();
+                      } catch (err) {
+                        alert("Failed to delete task");
+                      }
+                    }}
+                  >
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            {/* Task Description */}
+            <p className="text-xs text-gray-600 mt-1 break-words whitespace-pre-wrap capitalize">
+              {task.task_description}
+            </p>
+
+            {/* Status */}
+            <div className="text-xs text-gray-500 mt-2">
+              Status: {task.is_completed ? "Completed" : "Pending"}
+            </div>
           </div>
-        </ScrollArea>
-      </CardContent>
-    </Card>
+        ))}
+      </div>
+    </div>
   );
 }

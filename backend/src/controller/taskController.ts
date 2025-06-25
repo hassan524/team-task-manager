@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import client from "../db/db";
 
-// ✅ Create Task
 export const createtasks = async (req: Request, res: Response) => {
   const { task_name, task_description, team_id } = req.body;
 
@@ -23,12 +22,11 @@ export const createtasks = async (req: Request, res: Response) => {
   }
 };
 
-// ✅ Get Tasks by Team
 export const gettasks = async (req: Request, res: Response) => {
-  const teamId = req.query.team_id;
+  const teamId = req.query.teamId as string;
 
   if (!teamId) {
-    return res.status(400).json({ message: "team_id query param is required" });
+    return res.status(400).json({ message: "teamId query param is required" });
   }
 
   try {
@@ -37,14 +35,13 @@ export const gettasks = async (req: Request, res: Response) => {
       [teamId]
     );
 
-    res.status(200).json({ tasks: result.rows });
+    return res.status(200).json({ tasks: result.rows });
   } catch (error) {
     console.error("Get Tasks Error:", error);
-    res.status(500).json({ message: "Failed to fetch tasks" });
+    return res.status(500).json({ message: "Failed to fetch tasks" });
   }
 };
 
-// ✅ Update Task (including name & description only)
 export const updatetasks = async (req: Request, res: Response) => {
   const { task_id, task_name, task_description } = req.body;
 
@@ -67,7 +64,6 @@ export const updatetasks = async (req: Request, res: Response) => {
   }
 };
 
-// ✅ Delete Task
 export const deletetasks = async (req: Request, res: Response) => {
   const { task_id } = req.body;
 
@@ -84,7 +80,6 @@ export const deletetasks = async (req: Request, res: Response) => {
   }
 };
 
-// ✅ Toggle Complete Status
 export const toggleComplete = async (req: Request, res: Response) => {
   const { task_id, is_completed } = req.body;
 
