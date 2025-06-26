@@ -39,6 +39,10 @@ body {
   pointer-events: none;
 }
 
+.scroll-none {
+  scrollbar-width: none;
+}
+
 @media (max-width: 1024px) {
   .auth-form-wrapper::before {
     display: none;

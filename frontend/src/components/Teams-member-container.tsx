@@ -36,7 +36,7 @@ export default function TeamMembersContainer({ }: any) {
 
   if (!SelectTeam) {
     return (
-      <div className="w-full lg:w-1/2 h-[50vh] bg-white border p-4 flex items-center justify-center text-gray-500">
+      <div className="w-full lg:w-1/2 h-[50vh] bg-white shadow-sm rounded-2xl scroll-none border p-4 flex items-center justify-center text-gray-500">
         Select a team to view its members
       </div>
     );
@@ -46,7 +46,7 @@ export default function TeamMembersContainer({ }: any) {
     <div className="w-full lg:w-1/2 h-[50vh] bg-white border p-4 overflow-y-auto">
       <div className="flex justify-between items-center mb-3">
         <h2 className="text-lg font-semibold">Team Members</h2>
-        <span className="text-sm text-gray-500">{SelectTeam.name}</span>
+       <i className="text-2xl bi bi-person-add"></i>
       </div>
       {members.length === 0 ? (
         <p className="text-sm text-gray-400">No members in this team.</p>

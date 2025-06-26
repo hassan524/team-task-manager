@@ -55,7 +55,7 @@ export default function TeamsContainer({ onSelectTeam }: any) {
   }, []);
 
   return (
-    <div className="w-full lg:w-1/2 h-[50vh] bg-white border p-4 overflow-y-auto">
+    <div className="w-full lg:w-1/2 h-[50vh] bg-white border p-4 overflow-y-auto shadow-sm rounded-2xl scroll-none">
       <div className="flex justify-between items-center mb-3">
         <h2 className="text-lg font-semibold">Teams</h2>
         <Search className="h-4 w-4 text-gray-500" />
