@@ -1,15 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { useAppContext } from "@/context/context";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner"; // ✅ import toast
 
 const SignUp = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAppContext();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated]);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: ""
   });
-
-  const [message, setMessage] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,15 +31,21 @@ const SignUp = () => {
       const res = await axios.post(
         "http://localhost:3000/api/auth/signup",
         formData,
-        { withCredentials: true } // this includes cookie
+        { withCredentials: true }
       );
 
-      setMessage(res.data.message);
+      toast.success(res.data.message || "Registered successfully 🎉");
+      navigate("/auth/login");
+
     } catch (error: any) {
-      if (error.response?.data?.message) {
-        setMessage(error.response.data.message);
+      const res = error.response;
+
+      if (res?.data?.errors && res.data.errors.length > 0) {
+        toast.error(res.data.errors[0].msg); 
+      } else if (res?.data?.message) {
+        toast.error(res.data.message);
       } else {
-        setMessage("Something went wrong");
+        toast.error("Something went wrong");
       }
     }
   };
@@ -82,10 +97,6 @@ const SignUp = () => {
                 Sign Up
               </button>
             </form>
-
-            {message && (
-              <p className="text-sm text-center text-red-500 mt-4">{message}</p>
-            )}
           </div>
         </div>
       </div>

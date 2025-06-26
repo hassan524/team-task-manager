@@ -1,29 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import { useAppContext } from "@/context/context";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner"; // ✅ import toast
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
+  const { isAuthenticated, setIsAuthenticated } = useAppContext();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
 
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/login", {
-        email,
-        password,
-      }, {
-        withCredentials: true, // Send cookies
-      });
+      const res = await axios.post(
+        "http://localhost:3000/api/auth/login",
+        { email, password },
+        { withCredentials: true }
+      );
 
-      setSuccess(res.data.message || "Logged in successfully!");
-      console.log("Logged in User ID:", res.data.userId);
+      toast.success(res.data.message || "Login successful! 🚀");
+      setIsAuthenticated(true);
+      navigate("/dashboard");
     } catch (err: any) {
-      setError(err.response?.data?.message || "Login failed.");
+      const res = err.response;
+
+      // ✅ show validation errors line by line
+      if (res?.data?.errors && res.data.errors.length > 0) {
+        toast.error(res.data.errors[0].msg); // Show only first error
+      } else if (res?.data?.message) {
+        toast.error(res.data.message);
+      } else {
+        toast.error("Login failed. Something went wrong.");
+      }
     }
   };
 
@@ -39,9 +55,12 @@ const Login = () => {
       {/* Right */}
       <div className="h-full md:w-1/2 w-full flex justify-center items-center">
         <div className="auth-form-wrapper flex relative p-[1rem]">
-          <div id="auth-form" className="sm:py-[6rem] py-[4rem] w-full flex flex-col gap-5 sm:w-96 rounded-2xl p-6 lg:bg-slate-50 relative z-10">
+          <div
+            id="auth-form"
+            className="sm:py-[6rem] py-[4rem] w-full flex flex-col gap-5 sm:w-96 rounded-2xl p-6 lg:bg-slate-50 relative z-10"
+          >
             <h2 className="md:text-3xl text-[3.5rem] text-center font-bold mb-4">Welcome Back!</h2>
-            
+
             <form className="flex flex-col gap-6" onSubmit={handleLogin}>
               <input
                 type="email"
@@ -57,13 +76,13 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <button type="submit" className="mt-2 bg-[#6352FB] text-white py-2 rounded-2xl cursor-pointer">
+              <button
+                type="submit"
+                className="mt-2 bg-[#6352FB] text-white py-2 rounded-2xl cursor-pointer"
+              >
                 Log In
               </button>
             </form>
-
-            {error && <p className="text-red-500 text-center">{error}</p>}
-            {success && <p className="text-green-500 text-center">{success}</p>}
           </div>
         </div>
       </div>

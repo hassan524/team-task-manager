@@ -8,10 +8,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAppContext } from "@/context/context";
 import axios from "axios";
+import { CreateTask } from "./CreateTask";
 
 export function TasksContainer() {
-  const { SetTaskOpen, SelectTeam } = useAppContext();
+  const { SetTaskOpen, SelectTeam, SetUpdateTaskData } = useAppContext();
   const [tasks, setTasks] = useState<any[]>([]);
+  const [updateTask, setUpdateTask] = useState<any | null>(null);
 
   const refreshTasks = async () => {
     if (!SelectTeam) return;
@@ -32,14 +34,12 @@ export function TasksContainer() {
 
   useEffect(() => {
     if (SelectTeam) {
-      // @ts-ignore
       window.refreshTasks = refreshTasks;
     }
   }, [SelectTeam]);
 
   return (
     <div className="w-full bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex flex-col h-[60vh] overflow-y-auto">
-      {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
         <h2 className="text-lg font-semibold text-gray-900">Project Tasks</h2>
         <div className="flex items-center space-x-2">
@@ -47,7 +47,10 @@ export function TasksContainer() {
             variant="default"
             size="sm"
             className={`h-8 px-3 text-sm cursor-pointer ${SelectTeam ? "flex" : "hidden"}`}
-            onClick={() => SetTaskOpen(true)}
+            onClick={() => {
+              setUpdateTask(null); // clear update task
+              SetTaskOpen(true);   // open dialog
+            }}
           >
             + Task
           </Button>
@@ -74,76 +77,60 @@ export function TasksContainer() {
             key={task.id}
             className="w-full p-4 rounded-lg border border-gray-200 hover:bg-gray-50 transition"
           >
-            {/* Task title + menu */}
             <div className="flex justify-between items-start gap-2">
-              <h3 className="text-sm font-semibold text-gray-900 break-words w-full max-w-[85%] capitalize">
+              <h3 className="text-sm font-semibold text-gray-900 break-words w-full max-w-[85%]">
                 {task.task_name}
               </h3>
 
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button
-                    className={`h-6 w-6 shrink-0 rounded-full transition ${
-                      task.is_completed
-                        ? "bg-green-500 cursor-not-allowed"
-                        : "bg-gray-400 hover:bg-gray-500"
-                    }`}
-                    disabled={task.is_completed}
-                    aria-label="Open task options"
-                  ></button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {!task.is_completed && (
+              {task.is_completed ? (
+                <div className="h-6 w-6 shrink-0 rounded-full bg-green-500" />
+              ) : (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      className="h-6 w-6 shrink-0 rounded-full bg-gray-400 hover:bg-gray-500 transition"
+                    ></button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
                     <DropdownMenuItem
                       onClick={async () => {
-                        try {
-                          await axios.post(
-                            "http://localhost:3000/api/tasks/toggle",
-                            {
-                              task_id: task.id,
-                              is_completed: true,
-                            },
-                            { withCredentials: true }
-                          );
-                          window.refreshTasks?.();
-                        } catch (err) {
-                          alert("Failed to mark complete");
-                        }
+                        await axios.post(
+                          "http://localhost:3000/api/tasks/toggle",
+                          { task_id: task.id, is_completed: true },
+                          { withCredentials: true }
+                        );
+                        window.refreshTasks?.();
                       }}
                     >
                       Complete
                     </DropdownMenuItem>
-                  )}
-                  <DropdownMenuItem
-                    onClick={async () => {
-                      const confirm = window.confirm("Are you sure to delete?");
-                      if (!confirm) return;
-                      try {
+                    <DropdownMenuItem
+                      onClick={async () => {
                         await axios.post(
                           "http://localhost:3000/api/tasks/delete",
-                          {
-                            task_id: task.id,
-                          },
+                          { task_id: task.id },
                           { withCredentials: true }
                         );
                         window.refreshTasks?.();
-                      } catch (err) {
-                        alert("Failed to delete task");
-                      }
-                    }}
-                  >
-                    Delete
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                      }}
+                    >
+                      Delete
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        SetUpdateTaskData(task); // set current task to update
+                        SetTaskOpen(true);   // open dialog
+                      }}
+                    >
+                      Update
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
-
-            {/* Task Description */}
-            <p className="text-xs text-gray-600 mt-1 break-words whitespace-pre-wrap capitalize">
+            <p className="text-xs text-gray-600 mt-1 break-words whitespace-pre-wrap">
               {task.task_description}
             </p>
-
-            {/* Status */}
             <div className="text-xs text-gray-500 mt-2">
               Status: {task.is_completed ? "Completed" : "Pending"}
             </div>

@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SidebarProvider } from "../components/ui/sidebar";
 import { DashboardSidebar } from "../components/app-sidebar";
 import { Button } from "../components/ui/button";
-import { Bell, Plus, Menu } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useIsMobile } from "../hooks/use-mobile";
 import { Sheet, SheetContent, SheetTrigger } from "../components/ui/sheet";
 import TeamsContainer from "@/components/Teams-container";
@@ -11,12 +11,20 @@ import { TasksContainer } from "@/components/Tasks-container";
 import { CreateTeamDialog } from "@/components/CreateTeam";
 import { useAppContext } from "@/context/context";
 import { CreateTask } from "@/components/CreateTask";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
-     const [selectedTeam, setSelectedTeam] = useState<any>(null);
+    const navigate = useNavigate();
+    const [selectedTeam, setSelectedTeam] = useState<any>(null);
     const isMobile = useIsMobile();
-    const { SetTeamOpen, TeamOpen } = useAppContext()
-    console.log(TeamOpen)
+    const { SetTeamOpen, TeamOpen, isAuthenticated } = useAppContext()
+    
+      useEffect(() => {
+        if (!isAuthenticated) {
+          navigate("/auth/signup");
+        }
+      }, [])
+    
 
     return (
         <SidebarProvider defaultOpen={!isMobile}>
@@ -91,8 +99,8 @@ export default function Dashboard() {
                             {/* Team cards */}
                             <div className="flex flex-col gap-5">
                                 <div className="flex lg:flex-row flex-col gap-5">
-                                    <TeamsContainer onSelectTeam={setSelectedTeam}/>
-                                    <TeamMembersContainer team={selectedTeam}/>
+                                    <TeamsContainer onSelectTeam={setSelectedTeam} />
+                                    <TeamMembersContainer team={selectedTeam} />
                                 </div>
 
                                 {/* Tasks */}

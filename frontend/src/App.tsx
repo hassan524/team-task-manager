@@ -4,11 +4,13 @@ import Start from "./pages/Start";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import { Toaster } from "@/components/ui/sonner";
 
 function App() {
 
   return (
     <>
+     <Toaster />
       <Routes>
         <Route path="/" element={<AuthLayout />} >
           <Route index element={<Start />} />

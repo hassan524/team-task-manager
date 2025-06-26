@@ -4,60 +4,114 @@ declare global {
   }
 }
 
-import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useAppContext } from "@/context/context";
-import axios from "axios";
+import { useEffect, useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { useAppContext } from '@/context/context';
+import axios from 'axios';
 
 export function CreateTask() {
-  const { TaskOpen, SetTaskOpen, SelectTeam } = useAppContext();
+  const {
+    TaskOpen,
+    SetTaskOpen,
+    SelectTeam,
+    UpdateTaskData,
+    SetUpdateTaskData
+  } = useAppContext();
 
-  const [taskName, setTaskName] = useState("");
-  const [taskDescription, setTaskDescription] = useState("");
+  const [taskName, setTaskName] = useState('');
+  const [taskDescription, setTaskDescription] = useState('');
   const [loading, setLoading] = useState(false);
 
-const handleCreateTask = async () => {
-  if (!taskName || !taskDescription || !SelectTeam?.id) {
-    alert("Please fill all fields and select a team.");
-    return;
-  }
+  useEffect(() => {
+    if (TaskOpen) {
+      if (UpdateTaskData) {
+        setTaskName(UpdateTaskData.task_name || '');
+        setTaskDescription(UpdateTaskData.task_description || '');
+      } else {
+        setTaskName('');
+        setTaskDescription('');
+      }
+    }
+  }, [TaskOpen, UpdateTaskData]);
 
-  try {
-    setLoading(true);
+  const handleSubmit = async () => {
+    if (!taskName || !taskDescription || !SelectTeam?.id) {
+      alert('Please fill all fields and select a team.');
+      return;
+    }
 
-    const res = await axios.post(
-      "http://localhost:3000/api/tasks/create",
-      {
-        task_name: taskName,
-        task_description: taskDescription,
-        team_id: SelectTeam.id,
-      },
-      { withCredentials: true }
-    );
+    try {
+      setLoading(true);
 
-    // Clear inputs
-    setTaskName("");
-    setTaskDescription("");
+      if (UpdateTaskData?.id) {
+        // ✅ Update logic
+        await axios.post(
+          'http://localhost:3000/api/tasks/update',
+          {
+            task_id: UpdateTaskData.id,
+            task_name: taskName,
+            task_description: taskDescription,
+          },
+          { withCredentials: true }
+        );
+      } else {
+        // ✅ Create logic
+        await axios.post(
+          'http://localhost:3000/api/tasks/create',
+          {
+            task_name: taskName,
+            task_description: taskDescription,
+            team_id: SelectTeam.id,
+          },
+          { withCredentials: true }
+        );
+      }
 
-    SetTaskOpen(false);
+      // Reset state
+      SetTaskOpen(false);
+      SetUpdateTaskData(null);
+      setTaskName('');
+      setTaskDescription('');
+      window.refreshTasks?.();
 
-    window.refreshTasks?.();
-
-  } catch (err) {
-    console.error("Failed to create task", err);
-    alert("Failed to create task");
-  } finally {
-    setLoading(false);
-  }
-};
+    } catch (err) {
+      console.error('Failed to save task', err);
+      alert('Failed to save task');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <Dialog open={TaskOpen} onOpenChange={SetTaskOpen}>
+    <Dialog
+      open={TaskOpen}
+      onOpenChange={(open) => {
+        SetTaskOpen(open);
+        if (!open) {
+          setTaskName('');
+          setTaskDescription('');
+          SetUpdateTaskData(null);
+        }
+      }}
+    >
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Create a new Task</DialogTitle>
+          <DialogTitle>
+            {UpdateTaskData ? 'Update Task' : 'Create a new Task'}
+          </DialogTitle>
+          <DialogDescription>
+            {UpdateTaskData
+              ? 'Edit your task details below.'
+              : 'Fill out the form to create a new task.'}
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 mt-4">
@@ -74,12 +128,14 @@ const handleCreateTask = async () => {
             />
           </div>
 
-          <Button
-            className="w-full"
-            onClick={handleCreateTask}
-            disabled={loading}
-          >
-            {loading ? "Creating..." : "Create"}
+          <Button className="w-full" onClick={handleSubmit} disabled={loading}>
+            {loading
+              ? UpdateTaskData
+                ? 'Updating...'
+                : 'Creating...'
+              : UpdateTaskData
+              ? 'Update'
+              : 'Create'}
           </Button>
         </div>
       </DialogContent>
