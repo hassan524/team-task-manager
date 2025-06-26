@@ -22,35 +22,36 @@ const colors = [
 
 export default function TeamsContainer({ onSelectTeam }: any) {
   const [teams, setTeams] = useState<Team[]>([]);
-  const {SetSelectTeam} = useAppContext()
+  const { SetSelectTeam } = useAppContext()
+
+  const fetchTeams = async () => {
+    try {
+      const res = await axios.get('http://localhost:3000/api/teams/GetTeams', {
+        withCredentials: true,
+      });
+
+      const fetchedTeams = res.data.teams || [];
+
+      const enhanced: Team[] = fetchedTeams.map((team: any) => {
+        const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        return {
+          ...team,
+          icon: randomIcon,
+          color: randomColor,
+          membercount: team.membercount || 0,
+        };
+      });
+
+      setTeams(enhanced);
+    } catch (err) {
+      console.error('Error fetching teams:', err);
+    }
+  };
 
   useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const res = await axios.get('http://localhost:3000/api/teams/GetTeams', {
-          withCredentials: true,
-        });
-
-        const fetchedTeams = res.data.teams || [];
-
-        const enhanced: Team[] = fetchedTeams.map((team: any) => {
-          const randomIcon = icons[Math.floor(Math.random() * icons.length)];
-          const randomColor = colors[Math.floor(Math.random() * colors.length)];
-          return {
-            ...team,
-            icon: randomIcon,
-            color: randomColor,
-            membercount: team.membercount || 0,
-          };
-        });
-
-        setTeams(enhanced);
-      } catch (err) {
-        console.error('Error fetching teams:', err);
-      }
-    };
-
     fetchTeams();
+    window.fetchTeams = fetchTeams;
   }, []);
 
   return (

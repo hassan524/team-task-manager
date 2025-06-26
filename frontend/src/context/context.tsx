@@ -31,6 +31,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         const res = await axios.get('http://localhost:3000/api/auth/check-auth', {
           withCredentials: true, 
         })
+        console.log(res.data)
         setIsAuthenticated(res.data.authenticated)
       } catch (err) {
         console.error('Auth check failed:', err)

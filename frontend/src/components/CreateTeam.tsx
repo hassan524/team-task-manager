@@ -1,3 +1,8 @@
+declare global {
+  interface Window {
+    fetchTeams: () => void;
+  }
+}
 
 import { useState } from 'react'
 import axios from 'axios'
@@ -28,12 +33,13 @@ export function CreateTeamDialog() {
         }
       )
 
-      console.log("✅ Team created:", response.data.team)
+      console.log("Team created:", response.data.team)
 
       setTeamName("")
       SetTeamOpen(false) 
+      window.fetchTeams?.();
     } catch (err: any) {
-      console.error("❌ Error creating team:", err.response?.data?.message || err.message)
+      console.error("Error creating team:", err.response?.data?.message || err.message)
     } finally {
       setLoading(false)
     }

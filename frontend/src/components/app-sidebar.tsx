@@ -1,19 +1,19 @@
-import { 
-  Sidebar, 
-  SidebarContent, 
-  SidebarFooter, 
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem
 } from "./ui/sidebar";
-import { 
-  BarChart3, 
-  Users, 
-  ClipboardList, 
-  TrendingUp, 
+import {
+  BarChart3,
+  Users,
+  ClipboardList,
+  TrendingUp,
   Settings,
-  CheckSquare
+  Check
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 
@@ -25,7 +25,7 @@ const navigation = [
     isActive: true
   },
   {
-    title: "Teams", 
+    title: "Teams",
     icon: Users,
     href: "/teams"
   },
@@ -48,21 +48,21 @@ const navigation = [
 
 export function DashboardSidebar() {
   return (
-    <Sidebar className="border-r border-slate-200 bg-white">
+    <Sidebar className="border-r border-slate-200">
       <SidebarHeader className="p-6 border-b border-slate-200">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <CheckSquare className="h-4 w-4 text-primary-foreground" />
+            <Check className="h-4 w-4 text-primary-foreground" />
           </div>
           <h1 className="text-xl font-semibold text-slate-900">TaskFlow</h1>
         </div>
       </SidebarHeader>
-      
-      <SidebarContent className="p-4">
+
+      <SidebarContent className="p-4 overflow-y-auto">
         <SidebarMenu>
           {navigation.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton 
+              <SidebarMenuButton
                 asChild
                 isActive={item.isActive}
                 className="w-full justify-start"
@@ -76,7 +76,7 @@ export function DashboardSidebar() {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      
+
       <SidebarFooter className="p-4 border-t border-slate-200">
         <div className="flex items-center space-x-3">
           <Avatar className="h-8 w-8">

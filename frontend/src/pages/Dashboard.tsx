@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { SidebarProvider } from "../components/ui/sidebar";
 import { DashboardSidebar } from "../components/app-sidebar";
 import { Button } from "../components/ui/button";
-import { Plus } from "lucide-react";
+import DashboardNav from "@/components/DashboardNav";
 import { useIsMobile } from "../hooks/use-mobile";
 import { Sheet, SheetContent, SheetTrigger } from "../components/ui/sheet";
 import TeamsContainer from "@/components/Teams-container";
@@ -12,19 +12,20 @@ import { CreateTeamDialog } from "@/components/CreateTeam";
 import { useAppContext } from "@/context/context";
 import { CreateTask } from "@/components/CreateTask";
 import { useNavigate } from "react-router-dom";
+import Mobilesidebar from "@/components/Mobile-sidebar";
 
 export default function Dashboard() {
     const navigate = useNavigate();
     const [selectedTeam, setSelectedTeam] = useState<any>(null);
     const isMobile = useIsMobile();
     const { SetTeamOpen, TeamOpen, isAuthenticated } = useAppContext()
-    
-      useEffect(() => {
+
+    useEffect(() => {
         if (!isAuthenticated) {
-          navigate("/auth/signup");
+            navigate("/auth/signup");
         }
-      }, [])
-    
+    }, [])
+
 
     return (
         <SidebarProvider defaultOpen={!isMobile}>
@@ -48,41 +49,20 @@ export default function Dashboard() {
                                 </div>
                             </Button>
                         </SheetTrigger>
-                        <SheetContent side="left" className="p-0 w-64">
-                            <DashboardSidebar />
+
+                        <SheetContent
+                            side="left"
+                            className="p-0 w-64 !h-screen !max-h-screen overflow-y-auto bg-white"
+                        >
+                            <Mobilesidebar />
                         </SheetContent>
                     </Sheet>
                 )}
 
                 <div className="flex flex-col flex-1 min-w-0">
-                    <header className="bg-white md:border-b md:border-gray-200 px-6 py-4">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <h1 className={`text-2xl ${!isMobile ? "block" : "hidden"} font-bold text-gray-900`}>
-                                    Team Dashboard
-                                </h1>
-                                <p className={`text-sm ${!isMobile ? "block" : "hidden"} text-gray-600`}>
-                                    Manage teams and track progress
-                                </p>
-                            </div>
 
-                            <div className="flex items-center space-x-2">
-                                <Button className="bg-blue-600 md:flex hidden hover:bg-blue-700" onClick={() => {
-                                    console.log("Button clicked!")
-                                    SetTeamOpen(true)
-                                }}>
-                                    <Plus className="mr-2 h-4 w-4" />
-                                    Create New Team
-                                </Button>
+                    <DashboardNav />
 
-                                {isMobile && (
-                                    <div className="flex items-center h-8 px-1 rounded-md bg-white space-x-2">
-                                        <i className="bi bi-three-dots-vertical text-gray-600 text-lg"></i>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </header>
 
                     <main className="flex-1 overflow-y-auto">
                         <div className="px-4 pt-4 pb-8 flex flex-col gap-8 min-h-full md:mt-0 mt-5">
@@ -97,8 +77,8 @@ export default function Dashboard() {
                             </div>
 
                             {/* Team cards */}
-                            <div className="flex flex-col gap-5">
-                                <div className="flex lg:flex-row flex-col gap-5">
+                            <div className="flex flex-col md:gap-5 gap-7">
+                                <div className="flex lg:flex-row flex-col md:gap-5 gap-7">
                                     <TeamsContainer onSelectTeam={setSelectedTeam} />
                                     <TeamMembersContainer team={selectedTeam} />
                                 </div>
