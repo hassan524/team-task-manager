@@ -19,7 +19,7 @@ export function TasksContainer() {
     if (!SelectTeam) return;
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/tasks/getTasks?teamId=${SelectTeam.id}`,
+        `https://4843cb49-1974-4419-8905-97420a96b80d-00-1kal2br4fska4.sisko.replit.dev/api/tasks/getTasks?teamId=${SelectTeam.id}`,
         { withCredentials: true }
       );
       const allTasks = res.data.tasks || [];
