@@ -22,14 +22,12 @@ const Mobilesidebar = () => {
 
   return (
     <div className="h-full flex flex-col bg-white">
-      {/* Header */}
       <div className="p-6 border-b border-slate-200">
         <div id="logo" className="sm:w-40 w-32">
           <img src="/logo.png" alt="Logo" />
         </div>
       </div>
 
-      {/* Navigation */}
       <div className="flex-1 p-4">
         <nav className="space-y-2">
           <a href="/" className="flex items-center space-x-3 px-3 py-3 rounded-lg bg-blue-50 text-blue-700 font-medium">
@@ -62,7 +60,6 @@ const Mobilesidebar = () => {
         </nav>
       </div>
 
-      {/* Footer */}
       <div className="p-4 border-t border-slate-200">
         <div className="flex items-center space-x-3">
           <Avatar className="h-8 w-8">

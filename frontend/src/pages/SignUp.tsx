@@ -34,7 +34,7 @@ const SignUp = () => {
         { withCredentials: true }
       );
 
-      toast.success(res.data.message || "Registered successfully 🎉");
+      toast.success(res.data.message || "Registered successfully");
       navigate("/auth/login");
 
     } catch (error: any) {
@@ -52,14 +52,12 @@ const SignUp = () => {
 
   return (
     <section className="h-full w-full flex md:flex-row flex-col items-center justify-center gap-5">
-      {/* Left */}
       <div className="h-full w-1/2 md:flex hidden justify-center items-center px-[1rem]">
         <div className="w-[28rem] mt-10">
           <img src="/authImage.png" alt="Auth" className="w-full object-contain" />
         </div>
       </div>
 
-      {/* Right */}
       <div className="h-full md:w-1/2 w-full flex justify-center items-center">
         <div className="auth-form-wrapper flex relative p-[1rem]">
           <div id="auth-form" className="py-[4rem] w-full flex flex-col gap-5 sm:w-96 rounded-2xl p-6 lg:bg-slate-50 relative z-10">

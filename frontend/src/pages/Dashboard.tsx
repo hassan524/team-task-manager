@@ -19,7 +19,7 @@ export default function Dashboard() {
     const navigate = useNavigate();
     const [selectedTeam, setSelectedTeam] = useState<any>(null);
     const isMobile = useIsMobile();
-    const { SetTeamOpen, TeamOpen, isAuthenticated, user } = useAppContext()
+    const { isAuthenticated, user } = useAppContext()
 
     useEffect(() => {
         if (!isAuthenticated) {

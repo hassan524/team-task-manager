@@ -66,7 +66,7 @@ export const GetTeamMembers = async (req: Request, res: Response) => {
 
     res.status(200).json({ members: result.rows });
   } catch (err) {
-    console.error('❌ Error getting team members:', err);
+    console.error('Error getting team members:', err);
     res.status(500).json({ message: 'Failed to fetch team members' });
   }
 };

@@ -24,7 +24,7 @@ export function TasksContainer() {
       );
       const allTasks = res.data.tasks || [];
       setTasks(allTasks);
-      applyFilter(activeFilter, allTasks); // maintain current filter
+      applyFilter(activeFilter, allTasks); 
     } catch (err) {
       console.error("Failed to fetch tasks", err);
     }

@@ -4,14 +4,12 @@ const Navbar = () => {
   return (
     <header className="h-[14vh] lg:px-[7rem] sm:px-[3rem] p-[1rem]">
       <nav className="h-full flex items-center justify-between">
-        {/* Left - Logo */}
         <div>
           <div id="logo" className="sm:w-40 w-32">
             <img src="/logo.png" alt="Logo" />
           </div>
         </div>
 
-        {/* Right - Buttons */}
         <div>
           <div className="px-2 py-1.5 flex gap-1 items-center border border-slate-200 rounded-2xl">
             <button className="py-2 sm:px-4 px-3 rounded-lg hover:bg-slate-50 cursor-pointer">

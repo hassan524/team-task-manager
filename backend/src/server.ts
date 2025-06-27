@@ -14,7 +14,7 @@ const PORT = 3000;
 const server = http.createServer(app);
 
 const pgPool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:yourpassword@localhost:5432/yourdb', // update this
+  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:yourpassword@localhost:5432/yourdb',
 });
 
 app.use(cors({
@@ -39,7 +39,7 @@ app.use(session({
 }));
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Server is running...');
+  res.send('Server is running yo...');
 });
 
 app.use('/api/auth', auth);
@@ -51,7 +51,7 @@ async function startServer() {
   await connectToDB();
 
   server.listen(PORT, () => {
-    console.log(`✅ Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
   });
 }
 

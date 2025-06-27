@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAppContext } from "@/context/context";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner"; // ✅ import toast
+import { toast } from "sonner";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -26,15 +26,14 @@ const Login = () => {
         { withCredentials: true }
       );
 
-      toast.success(res.data.message || "Login successful! 🚀");
+      toast.success(res.data.message || "Login successful!");
       setIsAuthenticated(true);
       navigate("/dashboard");
     } catch (err: any) {
       const res = err.response;
 
-      // ✅ show validation errors line by line
       if (res?.data?.errors && res.data.errors.length > 0) {
-        toast.error(res.data.errors[0].msg); // Show only first error
+        toast.error(res.data.errors[0].msg); 
       } else if (res?.data?.message) {
         toast.error(res.data.message);
       } else {
