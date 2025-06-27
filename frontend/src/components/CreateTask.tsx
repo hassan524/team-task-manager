@@ -54,7 +54,7 @@ export function CreateTask() {
       if (UpdateTaskData?.id) {
         // ✅ Update logic
         await axios.post(
-          'http://localhost:3000/api/tasks/update',
+          'https://4843cb49-1974-4419-8905-97420a96b80d-00-1kal2br4fska4.sisko.replit.dev/api/tasks/update',
           {
             task_id: UpdateTaskData.id,
             task_name: taskName,
@@ -65,7 +65,7 @@ export function CreateTask() {
       } else {
         // ✅ Create logic
         await axios.post(
-          'http://localhost:3000/api/tasks/create',
+          'https://4843cb49-1974-4419-8905-97420a96b80d-00-1kal2br4fska4.sisko.replit.dev/api/tasks/create',
           {
             task_name: taskName,
             task_description: taskDescription,
