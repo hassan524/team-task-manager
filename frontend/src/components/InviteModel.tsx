@@ -11,7 +11,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useAppContext } from '@/context/context';
-import { toast } from 'sonner'; // ✅ use sonner
+import { toast } from 'sonner'; 
 
 export function InviteModel() {
   const { InviteOpen, SetInviteOpen } = useAppContext();
