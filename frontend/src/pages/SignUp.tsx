@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAppContext } from "@/context/context";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner"; // ✅ import toast
+import { toast } from "sonner"; 
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const SignUp = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/auth/signup",
+        "https://4843cb49-1974-4419-8905-97420a96b80d-00-1kal2br4fska4.sisko.replit.dev/api/auth/signup",
         formData,
         { withCredentials: true }
       );
