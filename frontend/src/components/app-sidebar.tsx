@@ -65,12 +65,9 @@ export function DashboardSidebar() {
   return (
     <Sidebar className="border-r border-slate-200">
       <SidebarHeader className="p-6 border-b border-slate-200">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <Check className="h-4 w-4 text-primary-foreground" />
+       <div id="logo" className="sm:w-40 w-32">
+            <img src="/logo.png" alt="Logo" />
           </div>
-          <h1 className="text-xl font-semibold text-slate-900">TaskFlow</h1>
-        </div>
       </SidebarHeader>
 
       <SidebarContent className="p-4 overflow-y-auto">

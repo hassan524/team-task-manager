@@ -12,7 +12,7 @@ interface Member {
 
 export default function TeamMembersContainer({ }: any) {
   const [members, setMembers] = useState<Member[]>([]);
-    const {SelectTeam} = useAppContext()
+    const {SelectTeam, SetInviteOpen} = useAppContext()
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -46,7 +46,7 @@ export default function TeamMembersContainer({ }: any) {
     <div className="w-full lg:w-1/2 h-[50vh] bg-white border p-4 overflow-y-auto">
       <div className="flex justify-between items-center mb-3">
         <h2 className="text-lg font-semibold">Team Members</h2>
-       <i className="text-2xl bi bi-person-add"></i>
+       <i className="text-2xl bi bi-person-add cursor-pointer" onClick={() => SetInviteOpen(true)}></i>
       </div>
       {members.length === 0 ? (
         <p className="text-sm text-gray-400">No members in this team.</p>

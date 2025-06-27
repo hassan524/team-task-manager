@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "../components/ui/avatar";
 import { useAppContext } from "@/context/context";
-import { logout } from "@/methods/logout"; 
+import { logout } from "@/methods/logout";
 
 const Mobilesidebar = () => {
   const { user, setUser, setIsAuthenticated } = useAppContext();
@@ -24,11 +24,8 @@ const Mobilesidebar = () => {
     <div className="h-full flex flex-col bg-white">
       {/* Header */}
       <div className="p-6 border-b border-slate-200">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <Check className="h-4 w-4 text-primary-foreground" />
-          </div>
-          <h1 className="text-xl font-semibold text-slate-900">TaskFlow</h1>
+        <div id="logo" className="sm:w-40 w-32">
+          <img src="/logo.png" alt="Logo" />
         </div>
       </div>
 
@@ -57,7 +54,7 @@ const Mobilesidebar = () => {
           </a>
           <button
             onClick={handleLogout}
-            className="flex items-center w-full space-x-3 px-3 py-3 rounded-lg text-red-600 hover:bg-red-50"
+            className="flex items-center w-full space-x-3 px-3 py-3 rounded-lg text-gray-700 hover:bg-red-50"
           >
             <LogOut className="h-4 w-4" />
             <span>Logout</span>

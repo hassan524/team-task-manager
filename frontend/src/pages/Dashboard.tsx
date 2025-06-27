@@ -13,12 +13,13 @@ import { useAppContext } from "@/context/context";
 import { CreateTask } from "@/components/CreateTask";
 import { useNavigate } from "react-router-dom";
 import Mobilesidebar from "@/components/Mobile-sidebar";
+import { InviteModel } from "@/components/InviteModel";
 
 export default function Dashboard() {
     const navigate = useNavigate();
     const [selectedTeam, setSelectedTeam] = useState<any>(null);
     const isMobile = useIsMobile();
-    const { SetTeamOpen, TeamOpen, isAuthenticated } = useAppContext()
+    const { SetTeamOpen, TeamOpen, isAuthenticated, user } = useAppContext()
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -69,7 +70,7 @@ export default function Dashboard() {
                             {/* Page header */}
                             <div className="flex flex-col gap-1">
                                 <h1 className={`text-2xl ${!isMobile ? "hidden" : "block"} text-gray-900`}>
-                                    Hi Hassan!
+                                    Hi {user.name}!
                                 </h1>
                                 <h1 className={`text-3xl ${!isMobile ? "hidden" : "block"} font-semibold text-gray-900`}>
                                     Manage Your Team And Tasks
@@ -93,6 +94,7 @@ export default function Dashboard() {
             </div>
 
             <CreateTeamDialog />
+            <InviteModel />
             <CreateTask />
         </SidebarProvider>
     );

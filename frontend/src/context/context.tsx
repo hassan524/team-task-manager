@@ -16,6 +16,8 @@ interface AppContextType {
   setIsAuthenticated: (val: boolean | null) => void; 
   user: any;
   setUser: (user: any) => void;
+  InviteOpen: boolean;
+  SetInviteOpen: (val: boolean) => void
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -23,6 +25,7 @@ const AppContext = createContext<AppContextType | null>(null);
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [TeamOpen, SetTeamOpen] = useState(false);
   const [TaskOpen, SetTaskOpen] = useState(false);
+  const [InviteOpen, SetInviteOpen] = useState(false);
   const [SelectTeam, SetSelectTeam] = useState(null);
   const [UpdateTaskData, SetUpdateTaskData] = useState<any>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -71,6 +74,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setIsAuthenticated,
         user,
         setUser,
+        InviteOpen,
+        SetInviteOpen
       }}
     >
       {children}
