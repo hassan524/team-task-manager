@@ -67,24 +67,21 @@ export default function Dashboard() {
 
                     <main className="flex-1 overflow-y-auto">
                         <div className="px-4 pt-4 pb-8 flex flex-col gap-8 min-h-full md:mt-0 mt-5">
-                            {/* Page header */}
                             <div className="flex flex-col gap-1">
                                 <h1 className={`text-2xl ${!isMobile ? "hidden" : "block"} text-gray-900`}>
-                                    Hi {user.name}!
+                                    Hi {user?.name}!
                                 </h1>
                                 <h1 className={`text-3xl ${!isMobile ? "hidden" : "block"} font-semibold text-gray-900`}>
                                     Manage Your Team And Tasks
                                 </h1>
                             </div>
 
-                            {/* Team cards */}
                             <div className="flex flex-col md:gap-5 gap-7">
                                 <div className="flex lg:flex-row flex-col md:gap-5 gap-7">
                                     <TeamsContainer onSelectTeam={setSelectedTeam} />
                                     <TeamMembersContainer team={selectedTeam} />
                                 </div>
 
-                                {/* Tasks */}
                                 <TasksContainer />
                             </div>
                         </div>
