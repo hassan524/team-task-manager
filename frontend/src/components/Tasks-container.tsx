@@ -70,28 +70,26 @@ export function TasksContainer() {
           >
             + Task
           </Button>
-          {tasks ? {
-       <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" className="h-8 w-8 p-0">
-                <i className="bi bi-three-dots-vertical text-gray-700 text-base"></i>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => applyFilter("All")}>
-                All Tasks
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => applyFilter("In Progress")}>
-                In Progress
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => applyFilter("Completed")}>
-                Completed
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          }
-           : null
-          }
+         {tasks.length > 0 && (
+  <DropdownMenu>
+    <DropdownMenuTrigger asChild>
+      <Button variant="outline" size="icon" className="h-8 w-8 p-0">
+        <i className="bi bi-three-dots-vertical text-gray-700 text-base"></i>
+      </Button>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent align="end">
+      <DropdownMenuItem onClick={() => applyFilter("All")}>
+        All Tasks
+      </DropdownMenuItem>
+      <DropdownMenuItem onClick={() => applyFilter("In Progress")}>
+        In Progress
+      </DropdownMenuItem>
+      <DropdownMenuItem onClick={() => applyFilter("Completed")}>
+        Completed
+      </DropdownMenuItem>
+    </DropdownMenuContent>
+  </DropdownMenu>
+)}
          
         </div>
       </div>
