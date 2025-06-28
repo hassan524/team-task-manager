@@ -70,7 +70,8 @@ export function TasksContainer() {
           >
             + Task
           </Button>
-          <DropdownMenu>
+          {tasks ? {
+       <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon" className="h-8 w-8 p-0">
                 <i className="bi bi-three-dots-vertical text-gray-700 text-base"></i>
@@ -88,6 +89,10 @@ export function TasksContainer() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          }
+           : null
+          }
+         
         </div>
       </div>
 
