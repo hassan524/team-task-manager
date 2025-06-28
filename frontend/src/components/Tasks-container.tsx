@@ -121,7 +121,7 @@ export function TasksContainer() {
                       <DropdownMenuItem
                         onClick={async () => {
                           await axios.post(
-                            "http://localhost:3000/api/tasks/toggle",
+                            "https://4843cb49-1974-4419-8905-97420a96b80d-00-1kal2br4fska4.sisko.replit.dev/api/tasks/toggle",
                             { task_id: task.id, is_completed: true },
                             { withCredentials: true }
                           );
@@ -133,7 +133,7 @@ export function TasksContainer() {
                       <DropdownMenuItem
                         onClick={async () => {
                           await axios.post(
-                            "http://localhost:3000/api/tasks/delete",
+                            "https://4843cb49-1974-4419-8905-97420a96b80d-00-1kal2br4fska4.sisko.replit.dev/api/tasks/delete",
                             { task_id: task.id },
                             { withCredentials: true }
                           );
