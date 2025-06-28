@@ -8,7 +8,7 @@ export const logout = async ({
   setUser: (user: any) => void;
 }) => {
   try {
-    await axios.post("http://localhost:3000/api/auth/logout", {}, {
+    await axios.post("https://4843cb49-1974-4419-8905-97420a96b80d-00-1kal2br4fska4.sisko.replit.dev/api/auth/logout", {}, {
       withCredentials: true,
     });
 
