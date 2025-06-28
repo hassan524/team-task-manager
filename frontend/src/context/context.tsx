@@ -34,14 +34,14 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res1 = await axios.get('http://localhost:3000/api/auth/check-auth', {
+        const res1 = await axios.get('https://4843cb49-1974-4419-8905-97420a96b80d-00-1kal2br4fska4.sisko.replit.dev/api/auth/check-auth', {
           withCredentials: true,
         });
         console.log('check-auth:', res1.data);
         setIsAuthenticated(res1.data.authenticated);
 
         if (res1.data.authenticated) {
-          const res2 = await axios.get('http://localhost:3000/api/auth/get-auth', {
+          const res2 = await axios.get('https://4843cb49-1974-4419-8905-97420a96b80d-00-1kal2br4fska4.sisko.replit.dev/api/auth/get-auth', {
             withCredentials: true,
           });
           console.log('get-auth:', res2.data);
