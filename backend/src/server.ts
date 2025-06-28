@@ -14,7 +14,7 @@ const PORT = 3000;
 const server = http.createServer(app);
 
 const pgPool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:yourpassword@localhost:5432/yourdb',
+  connectionString: process.env.DATABASE_URL,
 });
 
 app.use(cors({
