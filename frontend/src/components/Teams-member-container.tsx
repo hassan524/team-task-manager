@@ -43,7 +43,7 @@ export default function TeamMembersContainer({ }: any) {
   }
 
   return (
-    <div className="w-full lg:w-1/2 h-[50vh] bg-white border p-4 overflow-y-auto">
+    <div className="w-full lg:w-1/2 h-[50vh] bg-white shadow-sm rounded-2xl scroll-none border p-4 overflow-y-auto">
       <div className="flex justify-between items-center mb-3">
         <h2 className="text-lg font-semibold">Team Members</h2>
        <i className="text-2xl bi bi-person-add cursor-pointer" onClick={() => SetInviteOpen(true)}></i>
