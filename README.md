@@ -1,6 +1,6 @@
-# Team Task Manager (Internship Project)
+# Team Task Manager
 
-This is a **Task Management Web App** developed as part of an internship program. It allows teams to manage their projects by creating, updating, and tracking tasks with ease.
+This is a **Task Management Web App** . It allows teams to manage their projects by creating, updating, and tracking tasks with ease.
 
 ---
 
